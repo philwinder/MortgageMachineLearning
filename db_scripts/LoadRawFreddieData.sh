@@ -36,7 +36,7 @@ do
       cat $base_data_dir$freddie_monthly_file | psql agency-loan-level -c "COPY monthly_observations_raw_freddie FROM stdin DELIMITER '|' NULL '';"
       echo "`date`: loaded freddie raw monthly observations for $y Q$q"
 
-      psql agency-loan-level -f $app_dir$freddie_script
+      # psql agency-loan-level -f $app_dir$freddie_script
       echo "`date`: finished freddie loans and monthly observations for $y Q$q"
     fi
   done

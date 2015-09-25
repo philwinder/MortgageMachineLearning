@@ -43,7 +43,7 @@ CREATE TABLE hpi_indexes (
   first_date date
 );
 
-COPY hpi_indexes FROM '/Volumes/source/FreddieMac/sql/hpi_index_codes.txt' DELIMITER '|' NULL '';
+COPY hpi_indexes FROM '/home/phil/work/philwinder/MortgageMachineLearning/db_scripts/hpi_index_codes.txt' DELIMITER '|' NULL '';
 
 DROP TABLE IF EXISTS hpi_values;
 CREATE TABLE hpi_values (
@@ -53,7 +53,7 @@ CREATE TABLE hpi_values (
   PRIMARY KEY (hpi_index_id, date)
 );
 
-COPY hpi_values FROM '/Volumes/source/FreddieMac/sql/interpolated_hpi_values.txt' DELIMITER '|' NULL '';
+COPY hpi_values FROM '/home/phil/work/philwinder/MortgageMachineLearning/db_scripts/interpolated_hpi_values.txt' DELIMITER '|' NULL '';
 
 
 INSERT INTO loans_learning
@@ -66,7 +66,7 @@ INSERT INTO loans_learning
 SELECT
   (CASE
     WHEN credit_score='   ' THEN '600' --Three spaces, if Credit Score is < 301 or > 850.
-    WHEN credit_score='' THEN '0' -- Will try and fill data
+    WHEN credit_score='' THEN '300' -- When null, is risky
     WHEN (credit_score)::integer > 0 THEN credit_score
     ELSE '300' -- When null, is risky
   END)::integer,
@@ -87,9 +87,9 @@ SELECT
   ocltv,
   (CASE
     WHEN dti='   ' THEN '65' -- When three spaces is > 65
-    WHEN dti='' THEN '0' -- Will try and fill data
+    WHEN dti='' THEN '65' -- When blank, is risky, so assume 65
     WHEN (dti)::integer > 0 THEN dti
-    ELSE '0' -- When null, is risky, so assume blank
+    ELSE '65' -- When null, is risky, so assume 65
   END)::integer,
   original_upb, oltv, original_interest_rate,
   (CASE

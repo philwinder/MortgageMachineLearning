@@ -139,16 +139,12 @@ def tile_raster_images(X, img_shape, tile_shape, tile_spacing=(0, 0),
         return out_array
 
 
-import climate
 import pickle
 import gzip
 import numpy as np
 import os
 import tempfile
 
-logging = climate.get_logger(__name__)
-
-climate.enable_default_logging()
 
 try:
     import matplotlib.pyplot as plt

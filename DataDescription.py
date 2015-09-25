@@ -14,7 +14,7 @@ monthlyColumnNames = ", ".join(monthlyColumnNames) + ", loan_sequence_number" + 
 
 # co_borrower_credit_score, sato, hpi_at_origination are all NULL
 import pg8000
-conn = pg8000.connect(database="agency-loan-level")
+conn = pg8000.connect(database="agency-loan-level", user="postgres", password="password")
 
 def getDefaultData(amount="50"):
     query = "SELECT " + monthlyColumnNames + " FROM " + DATABASE + " WHERE default_flag IS TRUE AND random() < 0.01 LIMIT " + amount

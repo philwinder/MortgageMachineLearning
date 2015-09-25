@@ -120,7 +120,7 @@ def preprocess_data(X, scaler=None):
     X = scaler.transform(X)
     return X, scaler
 
-X = getDefaultData("1000")
+X = getDefaultData("10000")
 X = X.append(getNonDefaultData(str(len(X))))
 
 

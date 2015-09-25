@@ -40,11 +40,6 @@ def plotImportances(forest, features, title=""):
     plt.savefig("plots/" + title + '.png',bbox_inches='tight')
     plt.close()
 
-
-def one_hot_dataframe(data, cols, replace=False):
-    vecData = pd.get_dummies(data, columns=cols)
-    return vecData
-
 def plotDescisionSurface(forest, X, title=""):
     importances = forest.feature_importances_
     indices = np.argsort(importances)[::-1]
@@ -79,7 +74,7 @@ def preprocess_data(X, scaler=None):
 if __name__ == "__main__":
 
 
-    X = getDefaultData("1000")
+    X = getDefaultData("10000")
     X = X.append(getNonDefaultData(str(len(X))))
 
     # X = X.drop(["channel", "loan_purpose", "property_type", "occupancy_status", "original_loan_term", "number_of_units", "prepayment_penalty_flag", "first_time_homebuyer_flag"], axis=1)
