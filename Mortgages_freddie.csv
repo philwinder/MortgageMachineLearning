@@ -1,0 +1,41 @@
+Column_name,Description,Affects_reposession
+credit_score,a number which is summarizing the borrower’s creditworthiness (FICO),3 
+first_payment_date,The date of the first scheduled mortgage payment,0
+first_time_homebuyer_flag,Indicates whether the Borrower(1) is purchasing the mortgaged property (2) will reside in the mortgaged property as a primary residence and (3) had no ownership interest,2
+maturity_date,month in which the final monthly payment on the mortgage is scheduled to be made,0
+msa,Using post code instead. Metropolitan Statistical Areas (MSAs) are defined by the United States Office of Management and Budget (OMB) and have at least one urbanized area with a population of 50000 or more inhabitants.,0
+mip,mortgage insurance percentage,2
+number_of_units,Denotes whether the mortgage is a one -two- three- or four-unit property,1
+occupancy_status,Denotes whether the mortgage type is owner occupied second home or investment property,2
+ocltv,original combined loan-to-value,3
+dti,original debt-to-income ratio,2
+original_upb,original unpaid balance,2
+oltv,original loan-to-value,3
+sato,loans interest rate- prevailing market rate,0
+original_interest_rate,the original note rate as indicated on the mortgage note,3
+channel,(retail: a mortgage loan that is originated underwritten and funded by a lender or its Affiliates    broker: person or entity that specializes in loan originations  correspondent:an entity that typically sells the Mortgages it originates to other lenders which are not Affiliates of that entity under a specific commitment or as part of an ongoing relationship),1
+prepayment_penalty_flag,denotes whether the the borrower of the mortgage is or at any time has been obligated to pay a penalty in the event of certain repayments of principal,2
+product_type,denotes the type of fixed-rate mortgage product ONLY ONE PRODUCT TYPE!,0
+property_state,a two-letter abbreviation indicating the state or territory within which the property securing the mortgage is located,0
+property_type,denotes whether the property type secured by the mortgage is a condominium or leasehold or planned unit development(PUD) or cooperative share or manufactured home or Single Family home,2
+postal_code,the postal code for the location of the mortgaged property,0
+loan_sequence_number,unique identifier assigned to each loan,0
+loan_purpose,indicates whether the mortgage loan is a Cash-out Refinance mortgage or No Cash-out Refinance mortgage or a Purchase mortgage,2
+original_loan_term,a calculation of the number of scheduled monthly payments of the mortgage based on the First Payment Date and Maturity Date,3
+number_of_borrowers,the number of Borrower(s) who are obligated to repay the mortgage note secured by the mortgaged property,2
+seller_name,name of seller,0
+servicer_name,name of servicer,0
+agency,,0
+seller_id,,0
+servicer_id,,0
+vintage,,0
+hpi_index_id,,0
+hpi_at_origination,,2
+final_zero_balance_code,,0
+final_zero_balance_date,,0
+first_serious_dq_date,,0
+mi_recoveries,,0
+net_sales_proceeds,,0
+non_mi_recoveries,,0
+expenses,,0
+co_borrower_credit_score,,0
