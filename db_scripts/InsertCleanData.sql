@@ -123,7 +123,7 @@ SELECT
   END),
   original_loan_term,
   (CASE
-    WHEN number_of_borrowers IS NULL THEN '0' -- When two spaces, unknown
+    WHEN number_of_borrowers IS NULL THEN '0'
     WHEN number_of_borrowers > 0 THEN number_of_borrowers
     ELSE '0'
   END)::integer,

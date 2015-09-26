@@ -9,6 +9,7 @@ from keras.layers import containers
 from keras.utils import np_utils
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.preprocessing import StandardScaler, Imputer
@@ -141,11 +142,14 @@ del X["default_flag"]
 
 ## END OF PANDAS DF
 
+# Hot one encode
+X = one_hot_dataframe(X, ["number_of_borrowers"])
 
 # Replace NaNs with imputed values
 imp = Imputer(missing_values=0, strategy='mean', axis=0)
-imp.fit(X)
-X_imp = imp.transform(X)
+X_imp = imp.fit_transform(X)
+
+
 # Then scale
 X_norm, scaler = preprocess_data(X_imp)
 # Then put imputed values back to zero
