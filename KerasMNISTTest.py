@@ -2,14 +2,21 @@ from __future__ import absolute_import
 from __future__ import print_function
 from datetime import datetime
 
+import numpy as np
+import theano
+
+np.random.seed(1234)
+
 from PIL import Image
 from keras.datasets import mnist
+from keras.layers.noise import GaussianNoise
 from keras.models import Sequential
 from keras.layers.core import AutoEncoder, Dense, Activation, Dropout
 from keras.layers import containers
 from keras.utils import np_utils
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.decomposition import TruncatedSVD
 from sklearn.manifold import TSNE
 
 from utils import tile_raster_images
@@ -25,6 +32,7 @@ def plotExamples(data, number = 9, title=""):
         tile_spacing=(1, 1))
     image = Image.fromarray(raster)
     image.save("plots/" + datetime.now().strftime("%Y%m%dT%H%M%S") + "_" + title + '.png')
+    plt.close()
 
 def getActivationsLayer0(layers, requested_layer=0):
     top_layer = layers[0].get_weights()[0]
@@ -38,7 +46,19 @@ def getActivationsLayer0(layers, requested_layer=0):
         y[i, :] = W[i, :] / w_norm
     return y, input_dim, bot_dim
 
+def plotScatter(X, y, title=""):
+    # Visualize data using PCA
+    ax = plt.figure(1)
+    plt.scatter(X[:, 0], X[:, 1], c=y, s=50)
+    plt.title(title)
+    plt.xticks(())
+    plt.yticks(())
+    plt.tight_layout()
+    plt.savefig("plots/" + datetime.now().strftime("%Y%m%dT%H%M%S") + "_" + title + '.png', bbox_inches='tight')
+    plt.close()
+
 def plotTSNE(toPlot, labels, nb_classes, title = ""):
+    print("Plotting TSNE")
     x_min, x_max = np.min(toPlot, 0), np.max(toPlot, 0)
     toPlot = (toPlot - x_min) / (x_max - x_min)
     print(toPlot.shape)
@@ -52,13 +72,18 @@ def plotTSNE(toPlot, labels, nb_classes, title = ""):
     if title is not None:
         plt.title(title)
     plt.savefig("plots/" + datetime.now().strftime("%Y%m%dT%H%M%S") + "_" + title + '.png', bbox_inches='tight')
+    plt.close()
+
+def pca(X):
+    pca = TruncatedSVD(n_components=2)
+    return pca.fit_transform(X)
 
 nb_classes = 10
 batch_size = 128
 activation = 'sigmoid'
 
 input_dim = 784
-hidden_dim = 250
+hidden_dim = 225
 
 nb_epoch = 20
 max_train_samples = 5000
@@ -100,7 +125,15 @@ print('classical_score:', classical_score)
 ##########################
 # autoencoder model test #
 ##########################
-plotExamples(X_train, number = 25, title="Original_")
+plotExamples(X_train, number = 25, title="1_Original_")
+print("Performing PCA")
+X_pca = pca(X_train)
+plotScatter(X_pca, y_train, title="2_PCA reduction (2d) of raw data (%dd)" % X_train.shape[1])
+
+print("Performing TSNE")
+model = TSNE(n_components=2, random_state=0, init="pca")
+toPlot = model.fit_transform(X_train[:1000])
+plotTSNE(toPlot, y_train[:1000], nb_classes, "3_t-SNE embedding of raw data ")
 
 print("Training AutoEncoder for feature viz")
 
@@ -113,9 +146,10 @@ autoencoder.add(AutoEncoder(encoder=encoder, decoder=decoder, output_reconstruct
 autoencoder.compile(loss='mean_squared_error', optimizer='adam')
 # Do NOT use validation data with return output_reconstruction=True
 autoencoder.fit(X_train, X_train, batch_size=batch_size, nb_epoch=nb_epoch, show_accuracy=False, verbose=0)
-plotExamples(autoencoder.predict(X_train), number = 25, title="Reproduction_")
+plotExamples(autoencoder.predict(X_train), number = 25, title="4_Reproduction_")
 vals = getActivationsLayer0(autoencoder.layers[0].encoder.layers)[0].T
-plotExamples(vals, number = hidden_dim, title="Neuron_features_")
+plotExamples(vals, number = hidden_dim, title="5_Neuron_features_")
+
 
 print("Training AutoEncoder for TSNE and classification")
 
@@ -133,13 +167,14 @@ prefilter_test = autoencoder.predict(X_test, verbose=0)
 print("prefilter_train: ", prefilter_train.shape)
 print("prefilter_test: ", prefilter_test.shape)
 
-
+print("Performing PCA")
+X_pca = pca(prefilter_train)
+plotScatter(X_pca, y_train, title="6_PCA reduction (2d) of auto-encoded data (%dd)" % prefilter_train.shape[1])
 
 print("Performing TSNE")
 model = TSNE(n_components=2, random_state=0, init="pca")
-toPlot = model.fit_transform(prefilter_test)
-plotTSNE(toPlot, y_test, nb_classes, "t-SNE embedding for AutoEncoded output")
-
+toPlot = model.fit_transform(prefilter_train[:1000])
+plotTSNE(toPlot, y_train[:1000], nb_classes, "7_t-SNE embedding of auto-encoded data ")
 
 
 print("Classifying and comparing")

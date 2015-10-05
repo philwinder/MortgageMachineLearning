@@ -14,10 +14,11 @@ monthlyColumnNames = ", ".join(monthlyColumnNames) + ", loan_sequence_number" + 
 
 # co_borrower_credit_score, sato, hpi_at_origination are all NULL
 import pg8000
-conn = pg8000.connect(database="agency-loan-level", user="postgres", password="password")
+conn = pg8000.connect(database="agency-loan-level") # Mac
+# conn = pg8000.connect(database="agency-loan-level", user="postgres", password="password") # Ubuntu
 
 def getDefaultData(amount="50"):
-    query = "SELECT " + monthlyColumnNames + " FROM " + DATABASE + " WHERE default_flag IS TRUE AND random() < 0.01 LIMIT " + amount
+    query = "SELECT " + monthlyColumnNames + " FROM " + DATABASE + " WHERE default_flag IS TRUE AND random() < 0.1 LIMIT " + amount
     defaults = pd.read_sql_query(query, conn, index_col="loan_sequence_number", parse_dates=None)
     return defaults
 

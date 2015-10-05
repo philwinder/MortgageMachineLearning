@@ -15,7 +15,6 @@ CREATE TABLE loans_learning (
   channel integer NOT NULL,
   prepayment_penalty_flag integer NOT NULL,
   property_type integer NOT NULL,
---  postal_code integer,
   loan_sequence_number char(12),
   loan_purpose integer NOT NULL,
   original_loan_term integer,
@@ -43,7 +42,8 @@ CREATE TABLE hpi_indexes (
   first_date date
 );
 
-COPY hpi_indexes FROM '/home/phil/work/philwinder/MortgageMachineLearning/db_scripts/hpi_index_codes.txt' DELIMITER '|' NULL '';
+--COPY hpi_indexes FROM '/home/phil/work/philwinder/MortgageMachineLearning/db_scripts/hpi_index_codes.txt' DELIMITER '|' NULL '';
+COPY hpi_indexes FROM '/Volumes/source/philwinder/MortgageMachineLearning/db_scripts/hpi_index_codes.txt' DELIMITER '|' NULL '';
 
 DROP TABLE IF EXISTS hpi_values;
 CREATE TABLE hpi_values (
@@ -53,7 +53,8 @@ CREATE TABLE hpi_values (
   PRIMARY KEY (hpi_index_id, date)
 );
 
-COPY hpi_values FROM '/home/phil/work/philwinder/MortgageMachineLearning/db_scripts/interpolated_hpi_values.txt' DELIMITER '|' NULL '';
+--COPY hpi_values FROM '/home/phil/work/philwinder/MortgageMachineLearning/db_scripts/interpolated_hpi_values.txt' DELIMITER '|' NULL '';
+COPY hpi_values FROM '/Volumes/source/philwinder/MortgageMachineLearning/db_scripts/interpolated_hpi_values.txt' DELIMITER '|' NULL '';
 
 
 INSERT INTO loans_learning
